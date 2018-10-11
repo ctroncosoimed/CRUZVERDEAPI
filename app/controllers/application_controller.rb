@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     if params[:accion].downcase == 'firma'
       @auditoria = []
       params[:Firmantes].map { |x| @auditoria << x["Auditoria"] if x["Auditoria"].present? }
-
+      return render json: {error: "Debe haber almenos 1 auditoria", status: 400} unless @auditoria.present?
       request= 
         Typhoeus.post("http://200.0.156.150/cgi-bin/autentia-audit.cgi",
           body:"

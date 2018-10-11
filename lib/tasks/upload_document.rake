@@ -23,7 +23,7 @@ namespace :upload_document do
                           <FlagsMail>0</FlagsMail>
                           <EstadoMail>-1</EstadoMail>
                           <EstadoFirma>#{x["TipoFirma"].to_i == 5  ? 4 : 0}</EstadoFirma>
-                          <TipoFirma>5</TipoFirma>
+                          <TipoFirma>#{x["TipoFirma"].to_i}</TipoFirma>
                           <Institucion xsi:type='xsd:string'>#{x["Intitucion"]}</Institucion>
                           <CodLugar xsi:type='xsd:string'></CodLugar>
                           <Orden>1</Orden>
@@ -39,11 +39,13 @@ namespace :upload_document do
       unless response.tags.nil? #tags
         response.tags.each do |key, value|
           key.each do |keys, values|
-           @tags << "<Tags xsi:type='urn:CTag'>
-                       <CodTag xsi:type='xsd:string'>#{keys unless keys.nil?}</CodTag>
-                      <Valor xsi:type='xsd:string'>#{values unless values.nil?}</Valor>
-                      <outDescrip xsi:type='xsd:string'></outDescrip>
-                    </Tags>"
+            if keys.present? and values.present?
+              @tags << "<Tags xsi:type='urn:CTag'>
+                          <CodTag xsi:type='xsd:string'>#{keys unless keys.nil?}</CodTag>
+                          <Valor xsi:type='xsd:string'>#{values unless values.nil?}</Valor>
+                          <outDescrip xsi:type='xsd:string'></outDescrip>
+                        </Tags>"
+            end
           end
         end
       end
@@ -126,7 +128,7 @@ namespace :upload_document do
       end
 
 
-        puts "#{response.dec_code} Guardado" if result["Envelope"]["Body"]["CDocsResp"]["Resultado"]["Err"].to_i == 0
+      puts "#{response.dec_code} Guardado" if result["Envelope"]["Body"]["CDocsResp"]["Resultado"]["Err"].to_i == 0
       if result["Envelope"]["Body"]["CDocsResp"]["Resultado"]["Err"].to_i == 5201
         response.destroy
         puts "#{response.dec_code} Borrado"
