@@ -7,10 +7,10 @@ class V1::FirmaElectronicaController < ApplicationController
       @result= case params[:accion].downcase
                when "firma" then V1::FirmaController.firma(params)
                when "digitalizacion" then V1::DigitalizacionController.digitalizacion(params)
-               else {error: "Ingrese Acciones Validas", status:400}
+               else {CodError:1, mensaje: "Ingrese Acciones Validas", status:400}
                end
     else
-      @result= {error: "Parametro Accion Obligatorio", status: 400}
+      @result= {CodError:1, mensaje: "Parametro Accion Obligatorio", status: 400}
     end
     render json: @result
   end
