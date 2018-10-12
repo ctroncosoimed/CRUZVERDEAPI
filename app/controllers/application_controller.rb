@@ -29,8 +29,8 @@ class ApplicationController < ActionController::API
           ",
           headers:{Accept: "application/xml"})
     result= Hash.from_xml(request.body)
-    return render json: {error: "#{result["Envelope"]["Body"]["WSAuditReadResp"]["Resultado"]["Glosa"]}", status: 400} if result["Envelope"]["Body"]["WSAuditReadResp"]["Resultado"]["Err"].to_i == 5000
-    return render json: {error: "Auditoria NO valida para CRUZVERDE", status: 400} if result["Envelope"]["Body"]["WSAuditReadResp"]["DatosSistema"]["Institucion"] != 'CRUZVERDE' 
+    return render json: {CodError:1, mensaje: "#{result["Envelope"]["Body"]["WSAuditReadResp"]["Resultado"]["Glosa"]}", status: 400} if result["Envelope"]["Body"]["WSAuditReadResp"]["Resultado"]["Err"].to_i == 5000
+    return render json: {CodError:1, mensaje: "Auditoria NO valida para CRUZVERDE", status: 400} if result["Envelope"]["Body"]["WSAuditReadResp"]["DatosSistema"]["Institucion"] != 'CRUZVERDE' 
     end
   end
 
@@ -72,7 +72,7 @@ class ApplicationController < ActionController::API
   end
 
   def error404
-    return render json: {mensaje: "ruta no encontrada", status: 400}
+    return render json: {CodError:1, mensaje: "ruta no encontrada", status: 404}
   end
 
 end
