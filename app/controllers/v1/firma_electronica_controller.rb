@@ -1,8 +1,6 @@
 class V1::FirmaElectronicaController < ApplicationController
   before_action :token_validate
   before_action :audit_validate
-  before_action :roles_validate
-
 
   def index
     if params[:accion].present?
